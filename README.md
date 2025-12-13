@@ -52,6 +52,12 @@ source config_ad.env && ./aclguard
 
 ---
 
+## Output
+
+CSV and JSON files suitable for professional reporting and attack surface analysis
+
+---
+
 ## 📚 Documentation
 
 - **[Complete Documentation](README_v1.0.md)** - Full v1.0 documentation
@@ -59,9 +65,10 @@ source config_ad.env && ./aclguard
 
 ---
 
-## 🔒 Security Note
 
-This tool is for educational purposes only. It uses unencrypted LDAP connections and is not production-ready.
+Disclaimer
+
+This tool is intended for educational use and authorized security testing only.
 
 ---
 
