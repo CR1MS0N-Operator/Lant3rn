@@ -1,75 +1,109 @@
-# ACLGuard: Identifying Privilege Escalation Paths in Active Directory
+# ACLGuard — Offense-Led AD ACL Risk Discovery
 
-## Why I Built This & Security Relevance
-I built ACLGuard to develop a deeper, practical understanding of how Active Directory Access Control Lists (ACLs) are abused in real-world enterprise environments. Misconfigurations such as GenericAll, WriteDACL, and WriteOwner permissions frequently enable stealthy privilege escalation paths that are overlooked during routine assessments.
+ACLGuard helps red team operators surface **Active Directory ACL misconfigurations** that frequently enable
+real-world escalation paths (for example: `GenericAll`, `WriteDACL`, `WriteOwner`).
 
-This project focuses on identifying those misconfigurations programmatically, reinforcing how seemingly minor permission issues can lead to full domain compromise. ACLGuard is designed as a lightweight, scriptable tool suitable for offensive assessments, validation, and security research.
+It’s designed to be **lightweight, scriptable, and report-friendly**:
+enumerate → flag high-risk relationships → export structured output for triage and writeups.
 
-## Features
-- Enumerates Active Directory objects and associated ACLs
-- Identifies high-risk permission relationships
-- Outputs structured CSV and JSON data for analysis and reporting
+> Authorized testing only. Do not run ACLGuard against systems you do not own or have explicit permission to assess.
 
-## Technical Implementation
-- Written in C for performance and low-level interaction
-- Uses optimized LDAP queries for efficient enumeration
-- Inspired by BloodHound-style attack path analysis
-
-## Build & Usage
-```bash
-make
-./aclguard --domain example.local
 ---
 
-## 🚀 Current Version: v1.0
+## Why this exists
 
-ACLGuard v1.0 is now complete with full permission analysis and risk assessment capabilities!
+In enterprise AD, “small” delegation mistakes can become quiet, reliable privilege escalation paths.
+ACLGuard’s goal is to make those paths easier to **identify, validate, and explain** during offensive assessments.
 
-### Key Features:
-- **LDAP/AD Connection**: Connects to Active Directory servers
-- **Permission Analysis**: Analyzes 7 types of high-risk permissions
-- **Risk Scoring**: Calculates risk scores (0-100) with color-coded levels
-- **Export Capabilities**: Exports results to CSV and JSON formats
-- **Professional Output**: Clean, informative display with security summary
+What I optimize for:
 
-### Quick Start:
+- **Operator speed**: fast enumeration + usable on-screen summary
+- **Clear artifacts**: CSV/JSON you can drop into reporting workflows
+- **Repeatable methodology**: consistent steps and assumptions
 
-# Build
+---
+
+## What it does
+
+- Enumerates AD objects and associated ACLs via LDAP
+- Flags high-risk permissions commonly associated with escalation primitives
+- Exports results to **CSV** and/or **JSON**
+- Prints a concise summary for quick review
+
+---
+
+## Quick start
+
+### Build
+
+```bash
 make clean && make
+```
 
-# Configure (create config_ad.env)
-export ACLGUARD_LDAP_URI="ldap://your-ad-server:389"
-export ACLGUARD_BIND_DN="Administrator@domain.local"
-export ACLGUARD_BIND_PW="password"
-export ACLGUARD_BASE_DN="dc=domain,dc=local"
+### Configure
+Copy the example config and edit placeholders:
 
-# Run
-source config_ad.env && ./aclguard
+```bash
+cp examples/config.example.env .env
+$EDITOR .env
+```
+Load the env vars into your shell and run:
+```bash
+set -a
+source .env
+set +a
+./aclguard
+```
 
-# Export results
+### Export results
+```bash
 ./aclguard --export-csv --export-json
 ```
 
----
+### Output
+**ACLGuard generates artifacts suitable for reporting and attack surface review:**
 
-## Output
+- aclguard_results.csv
 
-CSV and JSON files suitable for professional reporting and attack surface analysis
+- aclguard_results.json
 
----
+If you publish output, sanitize it first (domains, hostnames, DNs, usernames, GUIDs/SIDs, etc.).
 
-## 📚 Documentation
+#### Example (sanitized)
+```text
+[SUMMARY]
+Objects scanned: 1,247
+Findings: 19 high-risk relationships
 
-- **[Complete Documentation](README_v1.0.md)** - Full v1.0 documentation
-- **[Wiki](wiki/)** - Detailed guides and architecture documentation
+[TOP FINDINGS]
+- User: jdoe -> Group: HelpdeskTier1 (WriteDACL)
+- Group: AppAdmins -> Computer: SQL01 (GenericAll)
+- User: svc_backup -> OU: Workstations (WriteOwner)
+```
 
----
+--- 
 
+## Limitations
+- AD ACL interpretation is nuanced; treat findings as leads to verify, not automatic exploitation.
 
-Disclaimer
+- Some edge cases (inheritance, protected objects, unusual delegation patterns) require manual validation.
 
-This tool is intended for educational use and authorized security testing only.
+- Large environments may require scoping to reduce noise and runtime.
 
----
+## Roadmap (minimal, credible)
+- v1.1: improve output clarity (grouping/sorting), add “why risky” context per finding
 
-**ACLGuard v1.0** - A cybersecurity learning project by ForeverLX
+- v1.2: optional scoping (OU base DN, object class filters), better summary statistics
+
+- v2.0: optional graph export integration for visual review (kept modular)
+
+### Docs
+- Usage
+- Methodology
+
+#### Disclaimer
+ACLGuard is intended for educational use and authorized security testing only.
+All examples and outputs in this repo should be sanitized before publication.
+
+#### License
+MIT — see MIT_LICENSE.
