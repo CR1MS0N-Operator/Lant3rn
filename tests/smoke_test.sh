@@ -1,28 +1,43 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Minimal smoke test for ACLGuard
+# Minimal smoke test for ACLGuard mock CLI
 # - builds
-# - runs ./aclguard
-# - checks for the banner line (simple indicator)
+# - runs mock subcommands
+# - validates JSON output shape
 
 echo "[*] Building..."
 make clean && make
 
-echo "[*] Running aclguard (stdout/stderr captured)..."
-OUT="$(./aclguard 2>&1 || true)"
+echo "[*] Running mock status..."
+OUT="$(./aclguard --mock status --json)"
+echo "$OUT" | grep -q "\"summary\""
+echo "$OUT" | grep -q "\"data\""
 
-echo "------ program output (first 200 lines) ------"
-echo "$OUT" | sed -n '1,200p'
-echo "----------------------------------------------"
+echo "[*] Running mock alerts..."
+OUT="$(./aclguard --mock alerts --recent --json)"
+echo "$OUT" | grep -q "\"summary\""
+echo "$OUT" | grep -q "\"recent\""
 
-# simple banner check (adjust text if you changed banner)
-if echo "$OUT" | grep -q "Access Control List Guard"; then
-  echo "[OK] Banner found."
-else
-  echo "[WARN] Banner not found — the program still may have run. Inspect output above."
-fi
+echo "[*] Running mock correlate..."
+OUT="$(./aclguard --mock correlate --attack kerberoasting --json)"
+echo "$OUT" | grep -q "\"summary\""
+echo "$OUT" | grep -q "\"incident_id\""
+
+echo "[*] Running mock analyze..."
+OUT="$(./aclguard --mock analyze --incident latest --json)"
+echo "$OUT" | grep -q "\"summary\""
+echo "$OUT" | grep -q "\"title\""
+
+echo "[*] Running mock metrics..."
+OUT="$(./aclguard --mock metrics --throughput --json)"
+echo "$OUT" | grep -q "\"summary\""
+echo "$OUT" | grep -q "\"metric\""
+
+echo "[*] Running simulation script..."
+python3 scripts/simulate_kerberoasting.py >/dev/null
+OUT="$(./aclguard --mock alerts --recent --json)"
+echo "$OUT" | grep -q "AL-1004"
 
 # exit success (so test doesn't fail your CI by default)
 exit 0
-

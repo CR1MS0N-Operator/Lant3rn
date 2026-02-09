@@ -56,7 +56,7 @@ Create a configuration file (e.g., `config_ad.env`):
 # ACLGuard AD Server Configuration
 export ACLGUARD_LDAP_URI="ldap://192.168.1.100:389"
 export ACLGUARD_BIND_DN="Administrator@yourdomain.local"
-export ACLGUARD_BIND_PW="YourPassword123!"
+export ACLGUARD_BIND_PW="Youryour_password_here"
 export ACLGUARD_BASE_DN="dc=yourdomain,dc=local"
 ```
 

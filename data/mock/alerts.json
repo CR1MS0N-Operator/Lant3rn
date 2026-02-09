@@ -1,0 +1,50 @@
+{
+  "summary": "4 recent alerts in last 24h. 2 critical, 1 high, 1 medium.",
+  "data": {
+    "window": "24h",
+    "recent": [
+      {
+        "id": "AL-1004",
+        "type": "Kerberoasting",
+        "severity": "critical",
+        "time": "2026-02-01T09:05:00Z",
+        "user": "svc_web",
+        "host": "WS-19",
+        "details": "Kerberoasting simulation triggered by script."
+      },
+      {
+        "id": "AL-1001",
+        "type": "Kerberoasting",
+        "severity": "critical",
+        "time": "2026-02-01T08:20:00Z",
+        "user": "svc_sql",
+        "host": "WS-17",
+        "details": "Service ticket requests spiked above baseline."
+      },
+      {
+        "id": "AL-1002",
+        "type": "Privileged Group Change",
+        "severity": "high",
+        "time": "2026-02-01T07:58:00Z",
+        "user": "jdoe",
+        "host": "AD-02",
+        "details": "User added to Domain Admins without ticket."
+      },
+      {
+        "id": "AL-1003",
+        "type": "Unusual LDAP Enumeration",
+        "severity": "medium",
+        "time": "2026-02-01T06:45:00Z",
+        "user": "svc_backup",
+        "host": "WS-03",
+        "details": "Burst of paged LDAP queries detected."
+      }
+    ],
+    "counts": {
+      "critical": 2,
+      "high": 1,
+      "medium": 1,
+      "low": 0
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "summary": "Mock metrics: throughput 18000 objects/min, accuracy 0.96, scale 3 forests.",
+  "data": {
+    "throughput": {
+      "value": 18000,
+      "unit": "objects/min",
+      "window": "5m",
+      "p95_ms": 210
+    },
+    "accuracy": {
+      "value": 0.96,
+      "precision": 0.94,
+      "recall": 0.92,
+      "window": "7d"
+    },
+    "scale": {
+      "forests": 3,
+      "domains": 7,
+      "domain_controllers": 12,
+      "users": 120000
+    }
+  }
+}

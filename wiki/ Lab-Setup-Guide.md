@@ -63,7 +63,7 @@ This guide will help you set up a safe testing environment for ACLGuard, includi
    Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
    
    # Create new forest
-   Install-ADDSForest -DomainName "example.local" -SafeModeAdministratorPassword (ConvertTo-SecureString "Password123!" -AsPlainText -Force)
+   Install-ADDSForest -DomainName "example.local" -SafeModeAdministratorPassword (ConvertTo-SecureString "your_password_here" -AsPlainText -Force)
    ```
 
 3. **Create Test Users**
@@ -73,11 +73,11 @@ This guide will help you set up a safe testing environment for ACLGuard, includi
    New-ADOrganizationalUnit -Name "ServiceAccounts" -Path "DC=example,DC=local"
    
    # Create test users
-   New-ADUser -Name "John Doe" -SamAccountName "john.doe" -UserPrincipalName "john.doe@example.local" -Path "OU=TestUsers,DC=example,DC=local" -AccountPassword (ConvertTo-SecureString "Password123!" -AsPlainText -Force) -Enabled $true
-   New-ADUser -Name "Jane Smith" -SamAccountName "jane.smith" -UserPrincipalName "jane.smith@example.local" -Path "OU=TestUsers,DC=example,DC=local" -AccountPassword (ConvertTo-SecureString "Password123!" -AsPlainText -Force) -Enabled $true
+   New-ADUser -Name "John Doe" -SamAccountName "john.doe" -UserPrincipalName "john.doe@example.local" -Path "OU=TestUsers,DC=example,DC=local" -AccountPassword (ConvertTo-SecureString "your_password_here" -AsPlainText -Force) -Enabled $true
+   New-ADUser -Name "Jane Smith" -SamAccountName "jane.smith" -UserPrincipalName "jane.smith@example.local" -Path "OU=TestUsers,DC=example,DC=local" -AccountPassword (ConvertTo-SecureString "your_password_here" -AsPlainText -Force) -Enabled $true
    
    # Create service account
-   New-ADUser -Name "SQL Service" -SamAccountName "sqlservice" -UserPrincipalName "sqlservice@example.local" -Path "OU=ServiceAccounts,DC=example,DC=local" -AccountPassword (ConvertTo-SecureString "Password123!" -AsPlainText -Force) -Enabled $true -PasswordNeverExpires $true
+   New-ADUser -Name "SQL Service" -SamAccountName "sqlservice" -UserPrincipalName "sqlservice@example.local" -Path "OU=ServiceAccounts,DC=example,DC=local" -AccountPassword (ConvertTo-SecureString "your_password_here" -AsPlainText -Force) -Enabled $true -PasswordNeverExpires $true
    ```
 
 4. **Create Test Groups**
@@ -134,7 +134,7 @@ This guide will help you set up a safe testing environment for ACLGuard, includi
    # Omit OpenLDAP server configuration: No
    # DNS domain name: example.com
    # Organization name: Example Organization
-   # Admin password: EasyOne123!
+   # Admin password: your_password_here
    # Database backend: MDB
    # Remove database when slapd is purged: No
    # Move old database: Yes
@@ -156,7 +156,7 @@ This guide will help you set up a safe testing environment for ACLGuard, includi
    objectClass: organizationalRole
    cn: admin
    description: LDAP administrator
-   userPassword: EasyOne123!
+   userPassword: your_password_here
    
    dn: ou=users,dc=example,dc=com
    objectClass: organizationalUnit
@@ -164,7 +164,7 @@ This guide will help you set up a safe testing environment for ACLGuard, includi
    EOF
    
    # Add base structure
-   ldapadd -x -D "cn=admin,dc=example,dc=com" -w "EasyOne123!" -f base.ldif
+   ldapadd -x -D "cn=admin,dc=example,dc=com" -w "your_password_here" -f base.ldif
    
    # Create users.ldif
    cat > users.ldif << EOF
@@ -196,7 +196,7 @@ This guide will help you set up a safe testing environment for ACLGuard, includi
    EOF
    
    # Add users
-   ldapadd -x -D "cn=admin,dc=example,dc=com" -w "EasyOne123!" -f users.ldif
+   ldapadd -x -D "cn=admin,dc=example,dc=com" -w "your_password_here" -f users.ldif
    ```
 
 ### Step 3: ACLGuard Development Machine
@@ -235,7 +235,7 @@ Create `config_ad.env`:
 ```bash
 export ACLGUARD_LDAP_URI="ldap://192.168.56.10:389"
 export ACLGUARD_BIND_DN="Administrator@example.local"
-export ACLGUARD_BIND_PW="Password123!"
+export ACLGUARD_BIND_PW="your_password_here"
 export ACLGUARD_BASE_DN="dc=example,dc=local"
 ```
 
@@ -244,7 +244,7 @@ Create `config_ldap.env`:
 ```bash
 export ACLGUARD_LDAP_URI="ldap://192.168.56.20:389"
 export ACLGUARD_BIND_DN="cn=admin,dc=example,dc=com"
-export ACLGUARD_BIND_PW="EasyOne123!"
+export ACLGUARD_BIND_PW="your_password_here"
 export ACLGUARD_BASE_DN="dc=example,dc=com"
 ```
 
@@ -256,7 +256,7 @@ export ACLGUARD_BASE_DN="dc=example,dc=com"
 ping 192.168.56.10
 
 # Test LDAP connection
-ldapsearch -x -H ldap://192.168.56.10:389 -D "Administrator@example.local" -w "Password123!" -b "dc=example,dc=local" -s base "(objectClass=*)" dn
+ldapsearch -x -H ldap://192.168.56.10:389 -D "Administrator@example.local" -w "your_password_here" -b "dc=example,dc=local" -s base "(objectClass=*)" dn
 
 # Test ACLGuard
 source config_ad.env && ./aclguard
@@ -268,7 +268,7 @@ source config_ad.env && ./aclguard
 ping 192.168.56.20
 
 # Test LDAP connection
-ldapsearch -x -H ldap://192.168.56.20:389 -D "cn=admin,dc=example,dc=com" -w "EasyOne123!" -b "dc=example,dc=com" -s base "(objectClass=*)" dn
+ldapsearch -x -H ldap://192.168.56.20:389 -D "cn=admin,dc=example,dc=com" -w "your_password_here" -b "dc=example,dc=com" -s base "(objectClass=*)" dn
 
 # Test ACLGuard
 source config_ldap.env && ./aclguard

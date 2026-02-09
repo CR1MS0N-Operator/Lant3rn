@@ -50,18 +50,25 @@ make clean && make
 ```
 
 ### Configuration
-Create a configuration file (e.g., `config_ad.env`):
+Create a configuration file (e.g., `config_ad.env`) using placeholder values or copy from `.env.example`:
 ```bash
-export ACLGUARD_LDAP_URI="ldap://192.168.56.10:389"
-export ACLGUARD_BIND_DN="Administrator@example.local"
-export ACLGUARD_BIND_PW="Password123!"
-export ACLGUARD_BASE_DN="dc=example,dc=local"
+export ACLGUARD_LDAP_URI="ldap://your-ad-host:389"
+export ACLGUARD_BIND_DN="Administrator@domain.local"
+export ACLGUARD_BIND_PW="your_password_here"
+export ACLGUARD_BASE_DN="dc=domain,dc=local"
 ```
 
 ### Usage
 ```bash
 # Basic scan
 source config_ad.env && ./aclguard
+
+# New LDAP subcommands (v2 CLI)
+./aclguard status
+./aclguard alerts --recent
+./aclguard correlate --attack kerberoasting
+./aclguard analyze --incident latest
+./aclguard metrics --throughput
 
 # Export to CSV
 ./aclguard --export-csv results.csv
@@ -81,7 +88,7 @@ source config_ad.env && ./aclguard
 ## 📊 Output Example
 
 ```
-✅ Successfully connected to LDAP server: ldap://192.168.56.10:389
+✅ Successfully connected to LDAP server: ldap://your-ad-host:389
 📊 Users retrieved: 4
 
 ═══════════════════════════════════════════════════════════════════════════════════

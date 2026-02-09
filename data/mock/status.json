@@ -1,0 +1,11 @@
+{
+  "summary": "Mock status OK. 4 alerts, 2 incidents, 4 detectors.",
+  "data": {
+    "mode": "mock",
+    "fixtures_version": "2026-02-01-sim",
+    "alerts_total": 4,
+    "incidents_open": 2,
+    "detectors": 4,
+    "last_refresh": "2026-02-01T09:10:00Z"
+  }
+}

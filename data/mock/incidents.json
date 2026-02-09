@@ -1,0 +1,74 @@
+{
+  "summary": "2 open incidents. Latest is INC-2207.",
+  "latest_incident_id": "INC-2207",
+  "data": {
+    "incidents": [
+      {
+        "id": "INC-2207",
+        "title": "Suspicious Service Ticket Burst",
+        "status": "open",
+        "severity": "high",
+        "started": "2026-02-01T08:15:00Z",
+        "last_update": "2026-02-01T08:45:00Z",
+        "related_alerts": [
+          "AL-1001",
+          "AL-1003"
+        ],
+        "findings": [
+          "TGS request rate for svc_sql is 6x baseline.",
+          "RC4 ticket usage detected with no change window.",
+          "No matching change ticket for service account activity."
+        ],
+        "recommendations": [
+          "Reset svc_sql credentials and rotate keys.",
+          "Disable RC4 where possible and enforce AES.",
+          "Review privileged access for the source host."
+        ]
+      },
+      {
+        "id": "INC-2206",
+        "title": "Privileged Group Membership Drift",
+        "status": "open",
+        "severity": "medium",
+        "started": "2026-02-01T06:55:00Z",
+        "last_update": "2026-02-01T07:10:00Z",
+        "related_alerts": [
+          "AL-1002"
+        ],
+        "findings": [
+          "jdoe added to Domain Admins without approval.",
+          "Rollback not initiated after detection."
+        ],
+        "recommendations": [
+          "Remove unauthorized membership.",
+          "Enable approval workflow for privileged changes."
+        ]
+      }
+    ],
+    "correlations": [
+      {
+        "attack": "kerberoasting",
+        "incident_id": "INC-2207",
+        "confidence": 0.93,
+        "signals": [
+          "TGS spikes for svc_sql",
+          "RC4 usage anomaly",
+          "No matching change ticket"
+        ],
+        "impact": "Potential credential material exposure",
+        "summary": "Service account tickets show patterns consistent with kerberoasting."
+      },
+      {
+        "attack": "privilege_escalation",
+        "incident_id": "INC-2206",
+        "confidence": 0.82,
+        "signals": [
+          "Domain Admins membership change",
+          "No approval workflow event"
+        ],
+        "impact": "Elevated privileges granted without oversight",
+        "summary": "Unauthorized admin group membership detected."
+      }
+    ]
+  }
+}

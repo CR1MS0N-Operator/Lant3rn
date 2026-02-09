@@ -16,10 +16,10 @@ typedef struct {
 #define ENV_BASE_DN  "ACLGUARD_BASE_DN"
 
 // Default values
-#define DEFAULT_LDAP_URI "ldap://localhost:389"
-#define DEFAULT_BIND_DN  "cn=admin,dc=example,dc=com"
-#define DEFAULT_BIND_PW  "admin"
-#define DEFAULT_BASE_DN  "dc=example,dc=com"
+#define DEFAULT_LDAP_URI ""
+#define DEFAULT_BIND_DN  ""
+#define DEFAULT_BIND_PW  ""
+#define DEFAULT_BASE_DN  ""
 
 // Function declarations
 int load_env_config(Config *config);
