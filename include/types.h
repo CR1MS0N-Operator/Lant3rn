@@ -27,4 +27,10 @@ typedef struct {
     char *mitre_name;      // Human-readable MITRE technique name
 } ADUser;
 
+// Free a single ADUser's dynamically allocated fields
+void ADUser_free(ADUser *user);
+
+// Free an array of ADUser structs and the array itself
+void ADUser_list_free(ADUser *users, int count);
+
 #endif

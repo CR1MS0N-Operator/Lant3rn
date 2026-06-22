@@ -159,32 +159,15 @@ static int handle_legacy(int argc, char *argv[]) {
         fprintf(stderr, "[WARN] Legacy export flags are deprecated and will be removed in a future release.\n");
     }
 
-    Config config = {0};
-    if (load_env_config(&config) != 0) {
-        fprintf(stderr, "Failed to load configuration from environment.\n");
-        Config_free(&config);
-        return 1;
-    }
-
-    if (!config.ldap_uri || !config.bind_dn || !config.bind_pw || !config.base_dn ||
-        strlen(config.ldap_uri) == 0 || strlen(config.bind_dn) == 0 ||
-        strlen(config.bind_pw) == 0 || strlen(config.base_dn) == 0) {
-        fprintf(stderr, "LDAP configuration missing. Set ACLGUARD_LDAP_URI, ACLGUARD_BIND_DN, ACLGUARD_BIND_PW, ACLGUARD_BASE_DN.\n");
-        Config_free(&config);
-        return 1;
-    }
-
     int user_count = 0;
-    ADUser *users = fetch_real_users(&config, &user_count);
+    ADUser *users = NULL;
+    if (load_ldap_users(&users, &user_count, NULL) != 0) return 1;
 
-    if (!users || user_count == 0) {
-        fprintf(stderr, "LDAP connection failed or no users fetched.\n");
-        Config_free(&config);
-        return 1;
-    }
-
-    printf("Successfully connected to LDAP server: %s\n", config.ldap_uri);
+    const char *ldap_uri = getenv("ACLGUARD_LDAP_URI");
+    printf("Successfully connected to LDAP server: %s\n",
+           ldap_uri ? ldap_uri : "(unknown)");
     printf("Users retrieved: %d\n\n", user_count);
+
 
     for (int i = 0; i < user_count; i++) {
         printf("═══════════════════════════════════════════════════════════════════════════════════\n");
@@ -231,8 +214,7 @@ static int handle_legacy(int argc, char *argv[]) {
     if (export_json) {
         export_to_json(json_filename, users, user_count);
     }
-    Config_free(&config);
-    free(users);
+    ADUser_list_free(users, user_count);
     return 0;
 }
 
@@ -293,7 +275,7 @@ int main(int argc, char *argv[]) {
         double scan_seconds = 0.0;
         if (load_ldap_users(&users, &count, &scan_seconds) != 0) return 1;
         int rc = ldap_status_output(users, count, json_output);
-        free(users);
+        ADUser_list_free(users, count);
         return rc;
     }
 
@@ -314,7 +296,7 @@ int main(int argc, char *argv[]) {
         double scan_seconds = 0.0;
         if (load_ldap_users(&users, &count, &scan_seconds) != 0) return 1;
         int rc = ldap_alerts_recent_output(users, count, json_output);
-        free(users);
+        ADUser_list_free(users, count);
         return rc;
     }
 
@@ -340,7 +322,7 @@ int main(int argc, char *argv[]) {
         double scan_seconds = 0.0;
         if (load_ldap_users(&users, &count, &scan_seconds) != 0) return 1;
         int rc = ldap_correlate_attack_output(users, count, attack, json_output);
-        free(users);
+        ADUser_list_free(users, count);
         return rc;
     }
 
@@ -366,7 +348,7 @@ int main(int argc, char *argv[]) {
         double scan_seconds = 0.0;
         if (load_ldap_users(&users, &count, &scan_seconds) != 0) return 1;
         int rc = ldap_analyze_incident_output(users, count, incident, json_output);
-        free(users);
+        ADUser_list_free(users, count);
         return rc;
     }
 
@@ -391,7 +373,7 @@ int main(int argc, char *argv[]) {
         double scan_seconds = 0.0;
         if (load_ldap_users(&users, &count, &scan_seconds) != 0) return 1;
         int rc = ldap_metrics_output(users, count, scan_seconds, metric, json_output);
-        free(users);
+        ADUser_list_free(users, count);
         return rc;
     }
 

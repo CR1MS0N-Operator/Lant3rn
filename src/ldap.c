@@ -5,6 +5,28 @@
 #include <string.h>
 #include <ldap.h>
 
+
+void ADUser_free(ADUser *user) {
+    if (!user) return;
+    free(user->username);
+    free(user->cn);
+    free(user->dn);
+    free(user->mail);
+    free(user->memberOf);
+    user->username = NULL;
+    user->cn = NULL;
+    user->dn = NULL;
+    user->mail = NULL;
+    user->memberOf = NULL;
+}
+
+void ADUser_list_free(ADUser *users, int count) {
+    if (!users) return;
+    for (int i = 0; i < count; i++) {
+        ADUser_free(&users[i]);
+    }
+    free(users);
+}
 // Function to analyze user permissions based on group memberships
 void analyze_user_permissions(ADUser *user) {
     // Initialize all permissions to 0
