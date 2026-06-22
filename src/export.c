@@ -16,9 +16,9 @@ void export_to_csv(const char *filename, ADUser *users, int count) {
         return;
     }
 
-    fprintf(fp, "Username,CN,Email,Groups,IsAdmin,CanResetPass,CanModifyACL,CanDelegate,HasServiceAcct,CanReadSecrets,CanWriteSecrets,Risk\n");
+    fprintf(fp, "Username,CN,Email,Groups,IsAdmin,CanResetPass,CanModifyACL,CanDelegate,HasServiceAcct,CanReadSecrets,CanWriteSecrets,Risk,MITRE_Attack_ID,MITRE_Attack_Name\n");
     for (int i = 0; i < count; i++) {
-        fprintf(fp, "%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d\n",
+        fprintf(fp, "%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%s,%s\n",
                 safe_str(users[i].username),
                 safe_str(users[i].cn),
                 safe_str(users[i].mail),
@@ -30,7 +30,9 @@ void export_to_csv(const char *filename, ADUser *users, int count) {
                 users[i].perms.hasServiceAcct,
                 users[i].perms.canReadSecrets,
                 users[i].perms.canWriteSecrets,
-                users[i].risk);
+                users[i].risk,
+                safe_str(users[i].mitre_attack),
+                safe_str(users[i].mitre_name));
     }
 
     fclose(fp);
@@ -53,6 +55,8 @@ void export_to_json(const char *filename, ADUser *users, int count) {
         json_object_object_add(juser, "canDelegateAuth", json_object_new_int(users[i].perms.canDelegateAuth));
         json_object_object_add(juser, "hasServiceAcct", json_object_new_int(users[i].perms.hasServiceAcct));
         json_object_object_add(juser, "canReadSecrets", json_object_new_int(users[i].perms.canReadSecrets));
+        json_object_object_add(juser, "mitre_attack_id", json_object_new_string(safe_str(users[i].mitre_attack)));
+        json_object_object_add(juser, "mitre_attack_name", json_object_new_string(safe_str(users[i].mitre_name)));
         json_object_object_add(juser, "canWriteSecrets", json_object_new_int(users[i].perms.canWriteSecrets));
         json_object_object_add(juser, "risk", json_object_new_int(users[i].risk));
 

@@ -1,8 +1,8 @@
 CC = gcc
-CFLAGS = -Wall -g -Isrc -Iinclude -I/usr/include
+CFLAGS = -Wall -Wextra -pedantic -O2 -Isrc -Iinclude -I/usr/include
 LDFLAGS = -lldap -llber -ljson-c
 
-OBJS = src/main.o src/config.o src/ldap.o src/ldap_insights.o src/risk_engine.o src/export.o src/error_handler.o src/mock.o
+OBJS = src/main.o src/config.o src/ldap.o src/ldap_insights.o src/export.o src/error_handler.o src/mock.o
 
 all: aclguard
 

@@ -19,7 +19,8 @@ void print_banner(void) {
     printf("               ██║  ██║╚██████╗███████╗\n");
     printf("               ╚═╝  ╚═╝ ╚═════╝╚══════╝\n");
     printf("                       ForeverLX\n");
-    printf("              Access Control List Guard\n\n");
+    printf("              Access Control List Guard\n");
+    printf("              v%s \"%s\"\n\n", ACLGUARD_VERSION, ACLGUARD_CODENAME);
 }
 
 // Function to get risk level description
@@ -69,6 +70,9 @@ void display_user_permissions(ADUser *user) {
         printf("None");
     }
     printf("\n");
+    if (user->mitre_attack) {
+        printf("    MITRE ATT&CK: %s — %s\n", user->mitre_attack, user->mitre_name);
+    }
 }
 
 static void print_usage(const char *prog) {
@@ -88,9 +92,10 @@ static void print_usage(const char *prog) {
 }
 
 static int load_ldap_users(ADUser **users_out, int *count_out, double *scan_seconds_out) {
-    Config config;
+    Config config = {0};
     if (load_env_config(&config) != 0) {
         fprintf(stderr, "Failed to load configuration from environment.\n");
+        Config_free(&config);
         return 1;
     }
 
@@ -98,6 +103,7 @@ static int load_ldap_users(ADUser **users_out, int *count_out, double *scan_seco
         strlen(config.ldap_uri) == 0 || strlen(config.bind_dn) == 0 ||
         strlen(config.bind_pw) == 0 || strlen(config.base_dn) == 0) {
         fprintf(stderr, "LDAP configuration missing. Set ACLGUARD_LDAP_URI, ACLGUARD_BIND_DN, ACLGUARD_BIND_PW, ACLGUARD_BASE_DN.\n");
+        Config_free(&config);
         return 1;
     }
 
@@ -106,6 +112,7 @@ static int load_ldap_users(ADUser **users_out, int *count_out, double *scan_seco
     clock_gettime(CLOCK_MONOTONIC, &start);
     ADUser *users = fetch_real_users(&config, count_out);
     clock_gettime(CLOCK_MONOTONIC, &end);
+    Config_free(&config);
 
     if (!users || *count_out == 0) {
         fprintf(stderr, "LDAP connection failed or no users fetched.\n");
@@ -152,9 +159,10 @@ static int handle_legacy(int argc, char *argv[]) {
         fprintf(stderr, "[WARN] Legacy export flags are deprecated and will be removed in a future release.\n");
     }
 
-    Config config;
+    Config config = {0};
     if (load_env_config(&config) != 0) {
         fprintf(stderr, "Failed to load configuration from environment.\n");
+        Config_free(&config);
         return 1;
     }
 
@@ -162,6 +170,7 @@ static int handle_legacy(int argc, char *argv[]) {
         strlen(config.ldap_uri) == 0 || strlen(config.bind_dn) == 0 ||
         strlen(config.bind_pw) == 0 || strlen(config.base_dn) == 0) {
         fprintf(stderr, "LDAP configuration missing. Set ACLGUARD_LDAP_URI, ACLGUARD_BIND_DN, ACLGUARD_BIND_PW, ACLGUARD_BASE_DN.\n");
+        Config_free(&config);
         return 1;
     }
 
@@ -170,6 +179,7 @@ static int handle_legacy(int argc, char *argv[]) {
 
     if (!users || user_count == 0) {
         fprintf(stderr, "LDAP connection failed or no users fetched.\n");
+        Config_free(&config);
         return 1;
     }
 
@@ -221,7 +231,7 @@ static int handle_legacy(int argc, char *argv[]) {
     if (export_json) {
         export_to_json(json_filename, users, user_count);
     }
-
+    Config_free(&config);
     free(users);
     return 0;
 }
@@ -231,6 +241,7 @@ int main(int argc, char *argv[]) {
     int json_output = 0;
     int show_help = 0;
 
+    int show_version = 0;
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--mock") == 0) {
             mock_mode = 1;
@@ -238,6 +249,8 @@ int main(int argc, char *argv[]) {
             json_output = 1;
         } else if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0) {
             show_help = 1;
+        } else if (strcmp(argv[i], "--version") == 0 || strcmp(argv[i], "-v") == 0) {
+            show_version = 1;
         }
     }
 
@@ -247,6 +260,11 @@ int main(int argc, char *argv[]) {
             subcmd_index = i;
             break;
         }
+    }
+
+    if (show_version) {
+        printf("ACLGuard v%s \"%s\"\n", ACLGUARD_VERSION, ACLGUARD_CODENAME);
+        return 0;
     }
 
     if (show_help) {

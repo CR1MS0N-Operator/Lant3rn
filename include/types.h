@@ -22,7 +22,9 @@ typedef struct {
         int canWriteSecrets;   // Can write sensitive attributes
     } perms;
     
-    int risk;         // Risk score (0-100)
+    int risk;              // Risk score (0-100)
+    char *mitre_attack;    // Primary MITRE ATT&CK technique ID
+    char *mitre_name;      // Human-readable MITRE technique name
 } ADUser;
 
 #endif

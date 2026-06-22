@@ -1,3 +1,6 @@
+#define ACLGUARD_VERSION "2.0.0"
+#define ACLGUARD_CODENAME "Purple"
+
 #ifndef CONFIG_H
 #define CONFIG_H
 
@@ -22,6 +25,7 @@ typedef struct {
 #define DEFAULT_BASE_DN  ""
 
 // Function declarations
+void Config_free(Config *config);
 int load_env_config(Config *config);
 
 #endif // CONFIG_H

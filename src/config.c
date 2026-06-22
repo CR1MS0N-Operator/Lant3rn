@@ -18,3 +18,14 @@ int load_env_config(Config *config) {
 
     return 0;
 }
+
+void Config_free(Config *config) {
+    free(config->ldap_uri);
+    free(config->bind_dn);
+    free(config->bind_pw);
+    free(config->base_dn);
+    config->ldap_uri = NULL;
+    config->bind_dn = NULL;
+    config->bind_pw = NULL;
+    config->base_dn = NULL;
+}

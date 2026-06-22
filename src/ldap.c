@@ -92,6 +92,35 @@ void analyze_user_permissions(ADUser *user) {
     
     // Cap risk score at 100
     if (user->risk > 100) user->risk = 100;
+
+    // Map highest-risk permission to MITRE ATT&CK technique
+    user->mitre_attack = NULL;
+    user->mitre_name = NULL;
+    if (user->perms.isAdmin) {
+        user->mitre_attack = "T1078.002";
+        user->mitre_name = "Valid Accounts: Domain Accounts";
+    } else if (user->perms.canWriteSecrets) {
+        user->mitre_attack = "T1098";
+        user->mitre_name = "Account Manipulation";
+    } else if (user->perms.canDelegateAuth) {
+        user->mitre_attack = "T1484.001";
+        user->mitre_name = "Group Policy Modification";
+    } else if (user->perms.canResetPasswords) {
+        user->mitre_attack = "T1098";
+        user->mitre_name = "Account Manipulation";
+    } else if (user->perms.canReadSecrets) {
+        user->mitre_attack = "T1552";
+        user->mitre_name = "Unsecured Credentials";
+    } else if (user->perms.canModifyACLs) {
+        user->mitre_attack = "T1484";
+        user->mitre_name = "Domain Policy Modification";
+    } else if (user->perms.hasServiceAcct) {
+        user->mitre_attack = "T1558.003";
+        user->mitre_name = "Kerberoasting";
+    } else if (user->perms.isPrivileged) {
+        user->mitre_attack = "T1078.002";
+        user->mitre_name = "Valid Accounts: Domain Accounts";
+    }
 }
 
 ADUser *fetch_real_users(const Config *config, int *count_out) {
@@ -143,10 +172,9 @@ ADUser *fetch_real_users(const Config *config, int *count_out) {
                            &result);
     
     if (rc != LDAP_SUCCESS) {
-        // Fallback 1: Try AD Users container
-        char *users_dn = "CN=Users,DC=example,DC=local";
+        // Fallback 1: Retry same base DN with user objectClass (AD-style)
         rc = ldap_search_ext_s(ld,
-                               users_dn,
+                               config->base_dn,
                                LDAP_SCOPE_SUBTREE,
                                "(objectClass=user)",
                                attrs,
@@ -216,7 +244,7 @@ ADUser *fetch_real_users(const Config *config, int *count_out) {
              attr = ldap_next_attribute(ld, entry, ber)) {
 
             vals = ldap_get_values_len(ld, entry, attr);
-            if (vals) {
+            if (vals && vals[0]) {
                 if (strcmp(attr, "cn") == 0) {
                     users[i].cn = strndup(vals[0]->bv_val, vals[0]->bv_len);
                 } else if (strcmp(attr, "mail") == 0) {
@@ -238,6 +266,8 @@ ADUser *fetch_real_users(const Config *config, int *count_out) {
                         users[i].memberOf = temp;
                     }
                 }
+            }
+            if (vals) {
                 ldap_value_free_len(vals);
             }
             ldap_memfree(attr);

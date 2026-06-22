@@ -3,7 +3,8 @@
 #include "config.h"
 
 int main() {
-    struct Config cfg = load_env_config();
+    Config cfg;
+    load_env_config(&cfg);
     printf("LDAP URI: %s\n", cfg.ldap_uri);
     printf("Bind DN: %s\n", cfg.bind_dn);
     printf("Base DN: %s\n", cfg.base_dn);

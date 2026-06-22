@@ -1,0 +1,28 @@
+# Build artifacts
+aclguard
+aclguard_strict
+test
+src/*.o
+*.o
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temp / config (user-specific)
+.env
+config_local.env
+config_ubuntu.env
+config_ad.env
+config.env
+config.cfg
+
+# Output files (user-generated)
+*.csv
+*.json
+
+# OS
+.DS_Store
+Thumbs.db
