@@ -73,8 +73,8 @@ sudo pacman -S base-devel openldap openldap-devel gcc make json-c
 ### Step 2: Build ACLGuard
 ```bash
 # Download the code
-git clone https://github.com/yourusername/ACLGuard.git
-cd ACLGuard
+git clone git@github.com:CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor.git
+cd ACLGuard-Active-Directory-Permission-Auditor
 
 # Build the program
 make clean && make
@@ -86,14 +86,7 @@ make clean && make
 ./aclguard --help
 ```
 
-You should see:
-```
-Usage: ./aclguard [options]
-Options:
-  --export-csv [filename]    Export results to CSV file
-  --export-json [filename]   Export results to JSON file
-  --help, -h                 Show this help message
-```
+You should see the CLI usage listing the subcommands (`status`, `alerts`, `correlate`, `analyze`, `metrics`) plus the deprecated legacy export flags.
 
 ## 🔧 Configuration
 
@@ -122,13 +115,19 @@ export ACLGUARD_BASE_DN="dc=yourdomain,dc=local"
 ```bash
 # Load configuration and run
 source config.env
-./aclguard
+./aclguard status
+
+# Or try it offline with mock data (no AD server needed)
+./aclguard --mock status
 ```
 
 ### Export Results
 ```bash
-# Save results to files
+# Save results to files (legacy flags, deprecated)
 ./aclguard --export-csv results.csv --export-json results.json
+
+# Or get JSON from a subcommand (preferred for automation)
+./aclguard status --json
 ```
 
 ## 📊 Understanding the Output
