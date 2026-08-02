@@ -32,8 +32,8 @@ sudo yum install openldap-devel json-c-devel
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/ACLGuard.git
-   cd ACLGuard
+   git clone git@github.com:CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor.git
+   cd ACLGuard-Active-Directory-Permission-Auditor
    ```
 
 2. **Build the project**:
@@ -72,21 +72,37 @@ source config_ad.env
 
 ### Basic Usage
 ```bash
-# Simple scan
-source config_ad.env && ./aclguard
+# Simple scan (deprecated legacy flags; use subcommands)
+source config_ad.env && ./aclguard status
+
+# Subcommands (v2.0 CLI)
+./aclguard status
+./aclguard alerts --recent
+./aclguard correlate --attack kerberoasting
+./aclguard analyze --incident latest
+./aclguard metrics --throughput
 ```
 
-### Export Results
+### Try It Offline (Mock Mode)
+```bash
+# No AD server required — uses bundled synthetic fixtures
+./aclguard --mock status
+./aclguard --mock alerts --recent
+./aclguard --mock correlate --attack kerberoasting
+./aclguard --mock analyze --incident latest
+./aclguard --mock metrics --throughput
+```
+
+### Export Results (legacy, deprecated)
 ```bash
 # Export to CSV
 ./aclguard --export-csv results.csv
 
 # Export to JSON
 ./aclguard --export-json results.json
-
-# Export both formats
-./aclguard --export-csv --export-json
 ```
+
+Legacy export flags still work but print a deprecation warning and will be removed in a future release. For automation, prefer `--json` on the subcommands.
 
 ## 📊 Understanding the Output
 

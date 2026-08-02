@@ -219,8 +219,8 @@ This guide will help you set up a safe testing environment for ACLGuard, includi
 
 2. **Clone ACLGuard**
    ```bash
-   git clone https://github.com/yourusername/ACLGuard.git
-   cd ACLGuard
+   git clone git@github.com:CR1MS0N-Operator/ACLGuard-Active-Directory-Permission-Auditor.git
+   cd ACLGuard-Active-Directory-Permission-Auditor
    ```
 
 3. **Build ACLGuard**
