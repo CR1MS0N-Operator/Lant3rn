@@ -1,29 +1,27 @@
-# ACLGuard Wiki
+# Lantern (ACLGuard) Wiki
 
-## 📚 Getting Started
+## Getting Started
 - [Home](Home.md)
-- [Getting Started Guide]( Getting-Started.md)
-- [Beginners Guide]( BEGINNERS_GUIDE.md)
-- [Lab Setup Guide]( Lab-Setup-Guide.md)
+- [Getting Started Guide](Getting-Started.md)
+- [Beginners Guide](BEGINNERS_GUIDE.md)
+- [Lab Setup Guide](Lab-Setup-Guide.md)
 
-## 🔧 Technical Documentation
-- [Architecture Overview]( ARCHITECTURE.md)
-- [ACL Concepts Explained]( ACL-Concepts-Explained.md)
-- [Development Log]( Development-Log,md)
+## Technical Documentation
+- [Architecture Overview](ARCHITECTURE.md) (C baseline — see [root ARCHITECTURE.md](../ARCHITECTURE.md) for the Lantern Go target)
+- [ACL Concepts Explained](ACL-Concepts-Explained.md)
+- [Development Log](Development-Log.md)
 
-## 📖 Advanced Topics
-- [White Paper]( WHITE_PAPER.md)
+## Advanced Topics
+- [White Paper](WHITE_PAPER.md)
 
-## 🚀 Quick Links
-- [GitHub Repository](https://github.com/yourusername/ACLGuard)
+## Quick Links
 - [Main README](../README.md)
-- [v1.0 Documentation](../README_v1.0.md)
-
-## 📞 Support
-- [GitHub Issues](https://github.com/yourusername/ACLGuard/issues)
-- [Documentation](Home.md)
-- [Community](https://github.com/yourusername/ACLGuard/discussions)
+- [Contributing](../CONTRIBUTING.md)
+- [Security Policy](../SECURITY.md)
+- [Changelog](../CHANGELOG.md)
+- [Integrations](../docs/INTEGRATIONS.md)
+- [v1.0 Documentation](../README_v1.0.md) (archived)
 
 ---
 
-**ACLGuard v1.0** - Empowering cybersecurity professionals through education and practical tools.
+**Lantern** — minimal AD permission graph and audit tool (formerly ACLGuard).
