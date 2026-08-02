@@ -1,71 +1,52 @@
-# ACLGuard Wiki
+# Lantern (ACLGuard) Wiki
 
-Welcome to the ACLGuard documentation wiki! This comprehensive guide will help you understand, build, and use ACLGuard effectively.
+Welcome to the documentation wiki for **Lantern** — codename for the minimal Active Directory permission graph and audit tool (repository name: ACLGuard).
 
-## 📖 Table of Contents
+The wiki documents the current C baseline and the planned Go rewrite. See the [root README](../README.md) for the project overview, [ARCHITECTURE.md](../ARCHITECTURE.md) for the architecture (including the Lantern Go target), and [CHANGELOG.md](../CHANGELOG.md) for release history.
+
+## Table of Contents
 
 ### Getting Started
-- **[Getting Started Guide]( Getting-Started.md)** - Quick setup and first run
-- **[Lab Setup Guide]( Lab-Setup-Guide.md)** - Setting up test environments
-- **[Beginners Guide]( BEGINNERS_GUIDE.md)** - Perfect for newcomers
+- [Getting Started Guide](Getting-Started.md) — quick setup and first run
+- [Lab Setup Guide](Lab-Setup-Guide.md) — setting up test environments
+- [Beginners Guide](BEGINNERS_GUIDE.md) — AD and permission concepts for newcomers
 
 ### Technical Documentation
-- **[Architecture Overview]( ARCHITECTURE.md)** - System design and components
-- **[ACL Concepts Explained]( ACL-Concepts-Explained.md)** - Understanding Active Directory permissions
-- **[Development Log]( Development-Log,md)** - Project development history
+- [Architecture Overview](ARCHITECTURE.md) — C baseline design (legacy; the [root ARCHITECTURE.md](../ARCHITECTURE.md) covers the Lantern Go target)
+- [ACL Concepts Explained](ACL-Concepts-Explained.md) — Active Directory permission model
+- [Development Log](Development-Log.md) — project development history
 
 ### Advanced Topics
-- **[White Paper]( WHITE_PAPER.md)** - Technical deep dive and security analysis
+- [White Paper](WHITE_PAPER.md) — technical deep dive (status: placeholder)
 
-## 🎯 What is ACLGuard?
+## What is Lantern?
 
-ACLGuard is a cybersecurity tool designed to analyze Active Directory permissions and assess security risks. It helps security professionals:
+A **BloodHound-inspired but smaller** AD permission auditor: query Active Directory over LDAP, flag over-privileged principals, and emit deterministic JSON/CSV findings for CI gates, SIEM, and research. Current implementation is C (v2.0.0 "Purple"); the Lantern Go rewrite adds a permission graph model and a CLI + TUI surface.
 
-- **Identify Overprivileged Accounts**: Find users with excessive permissions
-- **Assess Security Risks**: Calculate risk scores based on group memberships
-- **Export Findings**: Generate reports in CSV and JSON formats
-- **Understand AD Security**: Learn about common permission vulnerabilities
+## Quick Start
 
-## 🚀 Quick Start
+```bash
+make clean && make
+./aclguard --mock status           # offline demo, no AD required
+source config.env && ./aclguard status
+```
 
-1. **Build the tool**: `make clean && make`
-2. **Configure connection**: Set up your AD server credentials
-3. **Run analysis**: `./aclguard --export-csv --export-json`
-4. **Review results**: Check the generated reports
+## Current Features
 
-## 🔧 Key Features
+- LDAP enumeration of users and group memberships (read-only)
+- High-risk permission flags: admin, password reset, ACL modification, delegation, service accounts, secret access
+- Risk scoring (0–100) with MITRE ATT&CK mapping
+- Deterministic JSON/CSV output; offline mock mode
 
-- **Real-time AD Analysis**: Connects to live Active Directory servers
-- **Permission Mapping**: Identifies 7 types of high-risk permissions
-- **Risk Scoring**: Provides actionable security insights
-- **Professional Output**: Clean, enterprise-ready interface
-- **Export Capabilities**: Integration with SIEM and reporting tools
+## Security
 
-## 📊 Use Cases
+- Read-only tool for authorized assessments only
+- Credentials via environment variables only — never on the command line or in git
+- No LDAPS yet (cleartext on `ldap://`) — trusted networks only
+- See [SECURITY.md](../SECURITY.md) for the full policy
 
-### Security Teams
-- **Threat Hunting**: Identify potential attack vectors
-- **Incident Response**: Quick assessment during security incidents
-- **Compliance Auditing**: Regular permission reviews
-- **Penetration Testing**: Understanding target environments
+## Support
 
-### Learning & Development
-- **Cybersecurity Education**: Understanding AD security concepts
-- **Tool Development**: Learning C programming and LDAP integration
-- **Portfolio Projects**: Demonstrating technical skills
-
-## 🔒 Security Considerations
-
-- **Educational Purpose**: This tool is for learning and demonstration
-- **Not Production Ready**: Missing security hardening features
-- **Use Responsibly**: Only test on systems you own or have permission to test
-
-## 📞 Support
-
-- **Documentation**: Check the wiki pages for detailed guides
-- **Issues**: Report bugs or request features via GitHub issues
-- **Learning**: Use this as a foundation for your own security tools
-
----
-
-**ACLGuard v1.0** - Empowering cybersecurity professionals through education and practical tools.
+- Issues: report bugs via GitHub issues; security findings go to the maintainers privately (see [SECURITY.md](../SECURITY.md))
+- Documentation: the wiki pages above
+- Contributing: [CONTRIBUTING.md](../CONTRIBUTING.md)

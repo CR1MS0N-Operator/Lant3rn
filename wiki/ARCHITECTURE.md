@@ -1,4 +1,6 @@
-# ACLGuard Architecture
+# ACLGuard Architecture (Legacy — C v1.0/v2.0)
+
+> **Status: legacy documentation.** This page describes the original C implementation. The current architecture, including the Lantern Go rewrite target, graph model, and integration contracts, lives in the [root ARCHITECTURE.md](../ARCHITECTURE.md). This page is preserved for historical reference.
 
 This document provides a comprehensive overview of ACLGuard's system architecture, design decisions, and technical implementation.
 

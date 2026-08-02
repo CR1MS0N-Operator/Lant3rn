@@ -1,5 +1,7 @@
 # ACLGuard v1.0
 
+> **ARCHIVED — historical snapshot of the v1.0 release.** The project is now **Lantern** (codename), currently at C v2.0.0 "Purple" with a Go rewrite in progress. See the [current README](README.md), [CHANGELOG.md](CHANGELOG.md), and [ARCHITECTURE.md](ARCHITECTURE.md). This file is preserved for reference only — commands and structure shown here are out of date.
+
 **ACLGuard** is a C-based cybersecurity tool that connects to Active Directory, analyzes user permissions, and provides risk assessment based on group memberships and privileges.
 
 ⚠️ This is a learning/demo project — not production-ready.
