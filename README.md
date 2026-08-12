@@ -1,8 +1,12 @@
 # Lantern (ACLGuard)
 
-**Minimal Active Directory permission graph and audit tool.** BloodHound-inspired, but smaller and composable: a single static binary, no Neo4j, no .NET — query AD, build a permission graph, find over-privileged principals, and export findings for CI gates, SIEM, or research.
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
+![Language: C](https://img.shields.io/badge/language-C-555555.svg)
+![Version: v2.0.0](https://img.shields.io/badge/version-v2.0.0-informational.svg)
 
-Codename **Lantern** marks the next-generation rewrite: a **Go** implementation with a **CLI + TUI** surface. The repository currently ships the original C implementation (v2.0.0 "Purple"), which remains the working baseline while the Go rewrite lands incrementally.
+**Lightweight Active Directory permission auditor.** BloodHound-inspired, but smaller and composable: a single static binary, no Neo4j, no .NET. Query AD over LDAP, flag over-privileged principals, score risk 0–100 against MITRE ATT&CK techniques, and export deterministic JSON/CSV for CI gates, SIEM, or research. Part of the [CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil).
+
+Codename **Lantern** marks the next-generation rewrite: a **Go** implementation with a **CLI + TUI** surface and a queryable permission graph (users, groups, computers, and typed privilege edges). The repository currently ships the original C implementation (v2.0.0 "Purple"), which remains the working baseline while the Go rewrite lands incrementally.
 
 ## Status
 
@@ -22,6 +26,19 @@ Most AD security tooling is either a heavyweight framework (BloodHound CE: Neo4j
 - **Composable**: every stage is a separate step — collect, build graph, analyze, emit. Pipe JSON between stages, or run the whole pipeline in one command.
 - **Two surfaces, one core**: a scriptable CLI for CI/automation and a TUI for interactive exploration of the permission graph.
 - **Small by design**: single static binary, zero runtime dependencies, deterministic output. Run it in seconds; diff runs to detect permission drift.
+
+## Portfolio Role — Continuous Adversarial Validation
+
+Lantern is the **identity exposure validation** component of the [CR1MS0N continuous adversarial validation platform](https://github.com/CR1MS0N-Operator/veil): continuous AD permission validation instead of point-in-time audits.
+
+| Framework | Lantern's Role |
+|-----------|----------------|
+| **CTEM** (Continuous Threat Exposure Management) | **Discover** — LDAP permission enumeration maps the identity attack surface. **Prioritize** — risk scoring (0–100) ranks exposure. **Validate** — privilege-escalation paths confirm which over-permissions are actually exploitable. |
+| **TID** (Threat-Informed Defense) | Every finding maps to a MITRE ATT&CK technique (T1078.002, T1098, T1484, T1484.001, T1552, T1558.003) — the vocabulary of threat-informed defense. |
+| **FAIR** (Factor Analysis of Information Risk) | High-value principals and escalation paths are **loss magnitude** inputs; exposure likelihood feeds **loss event frequency** — risk = LEF × LM. |
+| **AEV** (Adversarial Exposure Validation) | Deterministic JSON and a single static binary make it CI/CD-schedulable: permission-drift detection runs continuously and feeds the agentic validation loop. |
+
+Sibling projects: [Veil](https://github.com/CR1MS0N-Operator/veil) (validation substrate) · [C4](https://github.com/CR1MS0N-Operator/c4) (validation engine) · [NightForge](https://github.com/CR1MS0N-Operator/nightforge) (measurement & mobilization).
 
 ## Current Features (C implementation)
 
@@ -98,13 +115,18 @@ JSON (for automation):
   {
     "username": "jdoe",
     "cn": "John Doe",
+    "email": "jdoe@corp.local",
     "groups": "CN=Domain Admins,CN=Users,DC=corp,DC=local",
     "isAdmin": 1,
     "canResetPasswords": 0,
     "canModifyACLs": 0,
-    "risk": 40,
+    "canDelegateAuth": 0,
+    "hasServiceAcct": 0,
+    "canReadSecrets": 0,
     "mitre_attack_id": "T1078.002",
-    "mitre_attack_name": "Valid Accounts: Domain Accounts"
+    "mitre_attack_name": "Valid Accounts: Domain Accounts",
+    "canWriteSecrets": 0,
+    "risk": 40
   }
 ]
 ```
@@ -148,7 +170,7 @@ See [.env.example](.env.example). Never commit real credentials — see [SECURIT
 
 - Detection engineering (Sigma/Splunk rules from MITRE-mapped findings)
 - Purple team assessments and AD permission boundary reviews
-- Continuous validation — scheduled runs catch permission drift
+- Continuous validation (CTEM) — scheduled runs catch permission drift between assessments, closing the Discover → Validate loop for identity
 - CI/CD security gates — fail the build above a risk threshold
 - Security research — reproducible evidence with MITRE attribution (see [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md))
 
