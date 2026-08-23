@@ -9,6 +9,16 @@ all: aclguard
 aclguard: $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
+# Lantern Go CLI (SBOM hook; sbom target scans the release binary)
+lantern:
+	go build -o lantern ./cmd/lantern
+
+sbom: aclguard
+	go run ./cmd/lantern sbom --binary aclguard --out out/sbom
+
+gotest: lantern
+	go vet ./... && go test ./...
+
 clean:
 	rm -f aclguard test $(OBJS)
 

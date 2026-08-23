@@ -4,6 +4,13 @@ aclguard_strict
 test
 src/*.o
 *.o
+lantern
+
+# Snapshot / SBOM output (engagement data boundary, S186 §5)
+out/
+results/
+*.snapshot
+*.jsonl
 
 # IDE
 .vscode/

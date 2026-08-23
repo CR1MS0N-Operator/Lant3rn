@@ -33,7 +33,7 @@ cron: lantern audit --format json > data/audit/YYYY-MM-DD.json
 
 ## C4 — C2 Control Center
 
-**What it is.** A Go CLI (`c4`, `github.com/CR1MS0N-Operator/c4`) that deploys, configures, and tears down C2 frameworks (Mythic, Sliver) via GraphQL (Hasura) and Docker Compose. Go 1.21+.
+**What it is.** A Go CLI (`c4`, `github.com/CR1MS0N-Operator/c4`) that deploys, configures, and tears down C2 frameworks (Mythic, Sliver) via GraphQL (Hasura) and Docker Compose. Go 1.26+. It is the C2 **validation engine** of the CR1MS0N continuous adversarial validation platform.
 
 **Integration contract (planned).**
 
