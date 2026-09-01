@@ -180,4 +180,4 @@ MIT License - See MIT_LICENSE file for details.
 
 ---
 
-**ACLGuard v1.0** - A cybersecurity learning project by ForeverLX
+**ACLGuard v1.0** - A cybersecurity learning project by CR1MS0N-Operator

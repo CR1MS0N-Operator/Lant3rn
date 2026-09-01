@@ -18,7 +18,7 @@ void print_banner(void) {
     printf("               ██╔══██║██║     ██║     \n");
     printf("               ██║  ██║╚██████╗███████╗\n");
     printf("               ╚═╝  ╚═╝ ╚═════╝╚══════╝\n");
-    printf("                       ForeverLX\n");
+    printf("                       CR1MS0N-Operator\n");
     printf("              Access Control List Guard\n");
     printf("              v%s \"%s\"\n\n", ACLGUARD_VERSION, ACLGUARD_CODENAME);
 }
