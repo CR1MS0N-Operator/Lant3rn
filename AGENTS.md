@@ -62,3 +62,10 @@ README_v1.0.md  archived v1.0 snapshot — historical, do not treat as current
 - CLI truth: `print_usage()` in `src/main.c`.
 - MITRE mapping: README table (T1078.002, T1098, T1484, T1484.001, T1552, T1558.003).
 - Integration targets (NightForge harness, C4, Veil, security-research): [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md).
+
+## Live state outranks the record (fleet rule, 2026-10-26)
+
+A measurement taken now outranks any document, skill or config that contradicts it — including this
+file. Never pin live facts (model ids, prices, ports, paths, versions) in docs or skills: name the role
+and resolve it live. Before a dispatch, run `cr1ms0n-fleet-check` (it fails loudly on a dead pin).
+Canonical rule and its origin: `~/Documents/ai-lab-vault/AGENTS.md` § "Live state outranks the record".
