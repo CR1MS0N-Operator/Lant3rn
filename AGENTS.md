@@ -8,6 +8,18 @@ Guidance for AI coding agents working in this repository. Human contributors see
 - Current implementation: **C v2.0.0 "Purple"**. The **Go rewrite (Lantern)** is planned and documented in [ARCHITECTURE.md](ARCHITECTURE.md) — do not assume Go code exists.
 - Docs describe both layers. Keep the distinction honest: never present planned Lantern behavior as implemented.
 
+## Language policy (operator rule, 2026-11-01, decision #289)
+
+Only Rust, Go and C/C++ ship first-party software:
+
+- **Big projects** — services, long-lived programs, substantial internal logic → **Rust**, as much as possible.
+- **Tools and scripts** — first-party CLIs, gates, helpers → **Go**, standard library only.
+- **C/C++** — only when a measurement shows a drastic difference; never a default, never a preference.
+
+**This repo is a tool (Go) — Lantern is a single-purpose Active Directory permission-audit CLI.** The planned Go rewrite matches this ruling; the current C v2.0.0 baseline is the legacy it replaces, so new C needs a measurement.
+
+Authority: decision #289 and `~/Documents/ai-lab-vault/AGENTS.md` § "Language policy". Open point: existing shell glue is thin operator glue, not software, and stays until touched.
+
 ## Commands
 
 ```bash
