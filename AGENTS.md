@@ -8,6 +8,23 @@ Guidance for AI coding agents working in this repository. Human contributors see
 - Current implementation: **C v2.0.0 "Purple"**. The **Go rewrite (Lantern)** is planned and documented in [ARCHITECTURE.md](ARCHITECTURE.md) — do not assume Go code exists.
 - Docs describe both layers. Keep the distinction honest: never present planned Lantern behavior as implemented.
 
+## Language policy (operator rule, 2026-11-01, decision #289)
+
+Only Rust, Go and C/C++ ship first-party software:
+
+- **Big projects** — services, long-lived programs, substantial internal logic → **Rust**, as much as possible.
+- **Tools and scripts** — first-party CLIs, gates, helpers → **Go**, standard library only.
+- **C/C++** — only when a measurement shows a drastic difference; never a default, never a preference.
+
+**Browser UI is the one scoped exception (decision #290).** TypeScript is permitted for code that runs
+in a browser when an application genuinely needs a framework; services and APIs stay Rust/Go, and a
+TypeScript/Node backend is a violation, not an application of the exception. Static/content sites are
+content, not software.
+
+**This repo is a tool (Go) — Lantern is a single-purpose Active Directory permission-audit CLI.** The planned Go rewrite matches this ruling; the current C v2.0.0 baseline is the legacy it replaces, so new C needs a measurement.
+
+Authority: decision #289 and `~/Documents/ai-lab-vault/AGENTS.md` § "Language policy". Open point: existing shell glue is thin operator glue, not software, and stays until touched.
+
 ## Commands
 
 ```bash
@@ -62,3 +79,10 @@ README_v1.0.md  archived v1.0 snapshot — historical, do not treat as current
 - CLI truth: `print_usage()` in `src/main.c`.
 - MITRE mapping: README table (T1078.002, T1098, T1484, T1484.001, T1552, T1558.003).
 - Integration targets (NightForge harness, C4, Veil, security-research): [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md).
+
+## Live state outranks the record (fleet rule, 2026-10-26)
+
+A measurement taken now outranks any document, skill or config that contradicts it — including this
+file. Never pin live facts (model ids, prices, ports, paths, versions) in docs or skills: name the role
+and resolve it live. Before a dispatch, run `cr1ms0n-fleet-check` (it fails loudly on a dead pin).
+Canonical rule and its origin: `~/Documents/ai-lab-vault/AGENTS.md` § "Live state outranks the record".
