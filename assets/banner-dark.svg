@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">Lantern — Illuminate identity exposure.</title>
+  <desc id="desc">A crimson blueprint with a lantern-shaped light at the center of connected directory nodes, on a dark background.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#303846" stroke-width="0.6"/>
+    </pattern>
+    <radialGradient id="glow">
+      <stop stop-color="#b92347" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#b92347" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="300" rx="12" fill="#0d1117"/>
+  <rect x="1" y="1" width="1198" height="298" rx="11" fill="url(#grid)"/>
+  <ellipse cx="968" cy="150" rx="220" ry="180" fill="url(#glow)"/>
+  <path d="M44 30H128" stroke="#ff5c77" stroke-width="3"/>
+  <g font-family="ui-monospace, 'DejaVu Sans Mono', monospace">
+    <text x="44" y="65" fill="#aab4c0" font-size="15" letter-spacing="2.5">CR1MS0N / IDENTITY EXPOSURE</text>
+    <text x="38" y="163" fill="#f0f3f6" font-size="88" font-weight="700" letter-spacing="-5">LANTERN<tspan fill="#ff5c77">_</tspan></text>
+    <text x="44" y="218" fill="#c9d1d9" font-size="29" letter-spacing="-1">Illuminate identity exposure.</text>
+    <text x="44" y="269" fill="#aab4c0" font-size="15" letter-spacing="1.3">ACTIVE DIRECTORY / PERMISSION AUDITING</text>
+  </g>
+  <g fill="none" stroke-linejoin="round">
+    <path d="M764 44H740V256H764M1120 44H1144V256H1120" stroke="#713449"/>
+    <circle cx="947" cy="150" r="106" stroke="#713449" stroke-dasharray="3 8"/>
+    <path d="M798 88L913 128M1096 88L981 128M798 222L915 174M1096 222L979 174M947 45V101M947 205V260" stroke="#a63b55"/>
+    <path d="M925 105V88A22 22 0 0 1 969 88V105M912 113H982L973 190H921ZM921 199H973" stroke="#ff5c77" stroke-width="2.5"/>
+    <path d="M935 135L947 124L959 135V168L947 181L935 168Z" fill="#301621" stroke="#ff5c77" stroke-width="2"/>
+    <path d="M947 135V169M929 150H965" stroke="#ff5c77" stroke-opacity="0.6"/>
+  </g>
+  <g fill="#20141f" stroke="#ff5c77" stroke-width="2">
+    <rect x="787" y="77" width="22" height="22" rx="3"/>
+    <rect x="1085" y="77" width="22" height="22" rx="3"/>
+    <rect x="787" y="211" width="22" height="22" rx="3"/>
+    <rect x="1085" y="211" width="22" height="22" rx="3"/>
+    <circle cx="947" cy="45" r="5"/>
+    <circle cx="947" cy="260" r="5"/>
+  </g>
+  <rect x="0.5" y="0.5" width="1199" height="299" rx="11.5" fill="none" stroke="#303846"/>
+</svg>

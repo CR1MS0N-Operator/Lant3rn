@@ -1,24 +1,12 @@
 # Contributing to Lantern (ACLGuard)
 
-Thanks for contributing. This project is mid-transition: the working baseline is C (v2.0.0 "Purple"), and the Lantern Go rewrite is landing incrementally. Keep both toolchains working; don't break the C build before the Go CLI is drop-in.
+Thanks for contributing. The working baseline is C (v2.0.0 "Purple"); the Lantern Go rewrite is planned. Start with the [usage guide](docs/USAGE.md) for the working CLI, and keep documentation clear about current versus target behavior.
 
 ## Development setup
 
-### Go (Lantern rewrite)
+### Go (planned Lantern rewrite)
 
-```bash
-# Go 1.26+ (go.mod targets 1.26)
-go version
-
-# Build the CLI
-go build ./cmd/lantern/
-
-# Vet + test
-go vet ./...
-go test ./...
-```
-
-The Go module is stdlib-first; the only planned external dependency is `github.com/go-ldap/ldap/v3`.
+There is no Go module or `cmd/lantern/` implementation in this baseline. Do not run Go build/test commands until those sources exist. See [ARCHITECTURE.md](ARCHITECTURE.md#2-lantern-go-target) for the target design: stdlib-first, with `github.com/go-ldap/ldap/v3` as the planned LDAP dependency.
 
 ### C (current baseline)
 
@@ -27,7 +15,7 @@ The Go module is stdlib-first; the only planned external dependency is `github.c
 sudo pacman -S base-devel openldap openldap-devel gcc make json-c
 
 # Ubuntu/Debian
-sudo apt install build-essential libldap2-dev liblber-dev libjson-c-dev
+sudo apt install build-essential libldap2-dev libjson-c-dev
 
 make clean && make
 ```
@@ -53,17 +41,7 @@ Run `make test` before every commit. If you change LDAP or output logic, also ru
 
 ## CI
 
-GitHub Actions workflow (`.github/workflows/ci.yml`) runs:
-
-| Job | Command |
-|-----|---------|
-| Go build + vet | `go build ./cmd/lantern/` + `go vet ./...` |
-| Go tests | `go test ./...` |
-| C build | `make clean && make` (with `libldap2-dev libjson-c-dev`) |
-| C smoke | `./tests/smoke_test.sh` |
-| Shell | `shellcheck` + `bash -n` on changed `.sh` scripts |
-
-Add or update this workflow when you add Go packages or scripts.
+The checked-in [Lint Commits workflow](.github/workflows/commitlint.yml) calls the shared Conventional Commits check. It does not run C builds, smoke tests, or a Go toolchain. Run the build and smoke tests locally before submitting changes; automated build/test jobs remain future work.
 
 ## Code style
 
@@ -104,7 +82,7 @@ feat(collect): add LDAP pagination
 
 1. Create a feature branch from `main` (`git checkout -b feat/<name>`).
 2. Make micro-commits.
-3. Verify: `go build ./... && go vet ./... && go test ./... && make clean && make && make test`.
+3. Verify the current baseline: `make clean && make && make test`. Add Go checks only once Go sources exist.
 4. Review the diff (e.g. `hunk diff`) before committing/PRing.
 5. Open a PR against `main` with a summary of what changed and verification evidence.
 
