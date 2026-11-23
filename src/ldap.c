@@ -153,6 +153,14 @@ ADUser *fetch_real_users(const Config *config, int *count_out) {
 
     *count_out = 0;
 
+    // Simple bind sends credentials inside the LDAP PDU; over ldap:// that is
+    // cleartext on the wire. Warn loudly when TLS is not in play.
+    if (strncmp(config->ldap_uri, "ldap://", 7) == 0) {
+        fprintf(stderr,
+                "warning: ACLGUARD_LDAP_URI is ldap:// — the bind password travels "
+                "in cleartext. Use ldaps:// or add StartTLS.\n");
+    }
+
     // 1. Initialize connection
     rc = ldap_initialize(&ld, config->ldap_uri);
     if (rc != LDAP_SUCCESS) {
@@ -282,8 +290,9 @@ ADUser *fetch_real_users(const Config *config, int *count_out) {
                         users[i].memberOf = strndup(vals[0]->bv_val, vals[0]->bv_len);
                     } else {
                         // Append additional groups
-                        char *temp = malloc(strlen(users[i].memberOf) + vals[0]->bv_len + 2);
-                        sprintf(temp, "%s,%s", users[i].memberOf, vals[0]->bv_val);
+                        size_t temp_sz = strlen(users[i].memberOf) + vals[0]->bv_len + 2;
+                        char *temp = malloc(temp_sz);
+                        snprintf(temp, temp_sz, "%s,%s", users[i].memberOf, vals[0]->bv_val);
                         free(users[i].memberOf);
                         users[i].memberOf = temp;
                     }
